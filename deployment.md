@@ -70,10 +70,9 @@ git push origin v0.1.0
 
 ### Artifacts
 The workflow will run and produce the following **archives** in the GitHub Releases page:
-- `arcdb-linux-amd64.tar.gz`
-- `arcdb-macos-amd64.tar.gz` (Intel)
-- `arcdb-macos-arm64.tar.gz` (Apple Silicon)
-- `arcdb-windows-amd64.zip`
+- **Linux**: `arcdb-linux-amd64.tar.gz` (x64), `arcdb-linux-arm64.tar.gz` (ARM64)
+- **macOS**: `arcdb-macos-amd64.tar.gz` (Intel), `arcdb-macos-arm64.tar.gz` (Silicon)
+- **Windows**: `arcdb-windows-amd64.zip` (x64), `arcdb-windows-arm64.zip` (ARM64)
 
 ### Running the Server
 After downloading the archive for your OS:
