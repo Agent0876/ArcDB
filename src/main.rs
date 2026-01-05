@@ -13,12 +13,12 @@ use arcdb::sql::Parser;
 fn print_banner() {
     println!(
         r#"
-  __  __ _       _ ____  ____  
- |  \/  (_)_ __ (_)  _ \| __ ) 
- | |\/| | | '_ \| | | | |  _ \ 
- | |  | | | | | | | |_| | |_) |
- |_|  |_|_|_| |_|_|____/|____/ 
-                               
+   _              ____  ____  
+  / \   _ __ ___ |  _ \| __ ) 
+ / _ \ | '__/ __|| | | |  _ \ 
+/ ___ \| | | (__ | |_| | |_) |
+/_/   \_\_|  \___||____/|____/ 
+
  A simple relational database engine in Rust
  Type '.help' for help, '.quit' to exit
 "#
