@@ -1,0 +1,46 @@
+[package]
+name = "arcdb"
+version = "0.1.0"
+edition = "2021"
+description = "A simple relational database engine written in Rust"
+authors = ["ArcDB Team"]
+
+[dependencies]
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Parsing
+nom = "7.1"
+
+# Bytes and serialization
+bytes = "1.5"
+byteorder = "1.5"
+
+# Async runtime
+tokio = { version = "1.35", features = ["full"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# CLI
+rustyline = "13.0"
+
+# Collections
+indexmap = "2.1"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[dev-dependencies]
+tempfile = "3.9"
+
+[[bin]]
+name = "arcdb"
+path = "src/main.rs"
+
+[lib]
+name = "arcdb"
+path = "src/lib.rs"

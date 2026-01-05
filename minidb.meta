@@ -1,0 +1,51 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "schema": {
+        "columns": [
+          {
+            "name": "id",
+            "data_type": "Integer",
+            "position": 0,
+            "nullable": false,
+            "default": null,
+            "primary_key": true,
+            "unique": false
+          },
+          {
+            "name": "email",
+            "data_type": {
+              "Varchar": 100
+            },
+            "position": 1,
+            "nullable": false,
+            "default": null,
+            "primary_key": false,
+            "unique": true
+          }
+        ],
+        "name_to_index": {
+          "id": 0,
+          "email": 1
+        }
+      },
+      "id": 1,
+      "stats": null
+    }
+  ],
+  "indexes": [
+    {
+      "name": "email_idx",
+      "table_name": "users",
+      "columns": [
+        "email"
+      ],
+      "unique": true,
+      "primary": false,
+      "id": 1
+    }
+  ],
+  "next_table_id": 2,
+  "next_index_id": 2
+}

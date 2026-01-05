@@ -1,0 +1,3 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.20s
+     Running `target/debug/arcdb --server`
+Server error: I/O error: Address already in use (os error 48)

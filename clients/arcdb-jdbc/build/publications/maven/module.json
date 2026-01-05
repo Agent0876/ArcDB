@@ -1,0 +1,89 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.arcdb",
+    "module": "arcdb-jdbc",
+    "version": "0.1.0",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.2.1"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.3.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "arcdb-jdbc-0.1.0.jar",
+          "url": "arcdb-jdbc-0.1.0.jar",
+          "size": 21070,
+          "sha512": "75c57729d1162c97281e41de4a5a5881fc6567c41582dfb1fd51f038be5b508e232fa5633e3751a22baa9e6fec2c998fa293eee081e4b75cb4f0dbf0b250d4e5",
+          "sha256": "9c096eb29395b2cb0d1bab2227898d4077634e71652ede49b1b2cda69e09de98",
+          "sha1": "39ea7e2e28d2f91b1918cf67dfe33442b0ac723e",
+          "md5": "700486f484967de27006cb0067ac4dd1"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.environment": "standard-jvm",
+        "org.gradle.jvm.version": 21,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.google.code.gson",
+          "module": "gson",
+          "version": {
+            "requires": "2.10.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.3.0"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "arcdb-jdbc-0.1.0.jar",
+          "url": "arcdb-jdbc-0.1.0.jar",
+          "size": 21070,
+          "sha512": "75c57729d1162c97281e41de4a5a5881fc6567c41582dfb1fd51f038be5b508e232fa5633e3751a22baa9e6fec2c998fa293eee081e4b75cb4f0dbf0b250d4e5",
+          "sha256": "9c096eb29395b2cb0d1bab2227898d4077634e71652ede49b1b2cda69e09de98",
+          "sha1": "39ea7e2e28d2f91b1918cf67dfe33442b0ac723e",
+          "md5": "700486f484967de27006cb0067ac4dd1"
+        }
+      ]
+    }
+  ]
+}
