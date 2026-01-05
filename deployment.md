@@ -69,10 +69,13 @@ git push origin v0.1.0
 ```
 
 ### Artifacts
-The workflow will run and produce the following **archives** containing both `arcdb-server` and `arcdb-cli` in the GitHub Releases page:
-- **Linux**: `arcdb-linux-amd64.tar.gz` (x64), `arcdb-linux-arm64.tar.gz` (ARM64)
-- **macOS**: `arcdb-macos-amd64.tar.gz` (Intel), `arcdb-macos-arm64.tar.gz` (Silicon)
-- **Windows**: `arcdb-windows-amd64.zip` (x64), `arcdb-windows-arm64.zip` (ARM64)
+The workflow will run and produce the following **archives** containing both `arcdb-server` and `arcdb-cli`, plus the **JDBC Driver JAR** in the GitHub Releases page:
+- **Binaries**:
+    - **Linux**: `arcdb-linux-amd64.tar.gz` (x64), `arcdb-linux-arm64.tar.gz` (ARM64)
+    - **macOS**: `arcdb-macos-amd64.tar.gz` (Intel), `arcdb-macos-arm64.tar.gz` (Silicon)
+    - **Windows**: `arcdb-windows-amd64.zip` (x64), `arcdb-windows-arm64.zip` (ARM64)
+- **Driver**:
+    - `arcdb-jdbc-0.1.0.jar` (Kotlin JDBC Driver)
 
 ### Running the Server
 After downloading the archive for your OS:

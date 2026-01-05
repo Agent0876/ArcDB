@@ -13,7 +13,7 @@ env:
 
 jobs:
   build-release:
-    name: Build Release
+    name: Build Binary
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -92,8 +92,33 @@ jobs:
           name: ${{ matrix.archive_name }}
           path: ${{ matrix.archive_name }}
 
+  build-jar:
+    name: Build JAR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '25'
+          distribution: 'corretto'
+
+      - name: Build JAR
+        working-directory: clients/arcdb-jdbc
+        run: |
+          chmod +x gradlew
+          ./gradlew jar
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: arcdb-jdbc.jar
+          path: clients/arcdb-jdbc/build/libs/arcdb-jdbc-*.jar
+
   create-release:
-    needs: build-release
+    needs: [build-release, build-jar]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -112,6 +137,7 @@ jobs:
             arcdb-macos-arm64.tar.gz/arcdb-macos-arm64.tar.gz
             arcdb-windows-amd64.zip/arcdb-windows-amd64.zip
             arcdb-windows-arm64.zip/arcdb-windows-arm64.zip
+            arcdb-jdbc.jar/arcdb-jdbc-*.jar
           draft: false
           prerelease: false
           generate_release_notes: true
