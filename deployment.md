@@ -69,7 +69,7 @@ git push origin v0.1.0
 ```
 
 ### Artifacts
-The workflow will run and produce the following **archives** in the GitHub Releases page:
+The workflow will run and produce the following **archives** containing both `arcdb-server` and `arcdb-cli` in the GitHub Releases page:
 - **Linux**: `arcdb-linux-amd64.tar.gz` (x64), `arcdb-linux-arm64.tar.gz` (ARM64)
 - **macOS**: `arcdb-macos-amd64.tar.gz` (Intel), `arcdb-macos-arm64.tar.gz` (Silicon)
 - **Windows**: `arcdb-windows-amd64.zip` (x64), `arcdb-windows-arm64.zip` (ARM64)
@@ -84,8 +84,8 @@ After downloading the archive for your OS:
    ```
 2. Make it executable (if needed) and run:
    ```bash
-   chmod +x arcdb
-   ./arcdb --server
+   chmod +x arcdb-server
+   ./arcdb-server
    ```
 
 **Windows:**
@@ -93,5 +93,5 @@ After downloading the archive for your OS:
 2. Open PowerShell or Command Prompt.
 3. Run:
    ```cmd
-   .\arcdb.exe --server
+   .\arcdb-server.exe
    ```

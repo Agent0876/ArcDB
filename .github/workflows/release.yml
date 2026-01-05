@@ -21,37 +21,31 @@ jobs:
           # Linux AMD64
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-            artifact_name: arcdb-linux-amd64
             archive_name: arcdb-linux-amd64.tar.gz
             use_cross: false
           # Linux ARM64
           - os: ubuntu-latest
             target: aarch64-unknown-linux-gnu
-            artifact_name: arcdb-linux-arm64
             archive_name: arcdb-linux-arm64.tar.gz
             use_cross: true
           # macOS Intel
           - os: macos-latest
             target: x86_64-apple-darwin
-            artifact_name: arcdb-macos-amd64
             archive_name: arcdb-macos-amd64.tar.gz
             use_cross: false
           # macOS Silicon
           - os: macos-14
             target: aarch64-apple-darwin
-            artifact_name: arcdb-macos-arm64
             archive_name: arcdb-macos-arm64.tar.gz
             use_cross: false
           # Windows AMD64
           - os: windows-latest
             target: x86_64-pc-windows-msvc
-            artifact_name: arcdb-windows-amd64.exe
             archive_name: arcdb-windows-amd64.zip
             use_cross: false
           # Windows ARM64
           - os: windows-latest
             target: aarch64-pc-windows-msvc
-            artifact_name: arcdb-windows-arm64.exe
             archive_name: arcdb-windows-arm64.zip
             use_cross: false
 
@@ -72,23 +66,25 @@ jobs:
         shell: bash
         run: |
           if [ "${{ matrix.use_cross }}" == "true" ]; then
-            cross build --release --target ${{ matrix.target }}
+            cross build --release --target ${{ matrix.target }} --bin arcdb-server --bin arcdb-cli
           else
-            cargo build --release --target ${{ matrix.target }}
+            cargo build --release --target ${{ matrix.target }} --bin arcdb-server --bin arcdb-cli
           fi
 
       - name: Package Artifact (Unix)
         if: runner.os != 'Windows'
         run: |
-          cp target/${{ matrix.target }}/release/arcdb arcdb
-          tar -czf ${{ matrix.archive_name }} arcdb
+          cp target/${{ matrix.target }}/release/arcdb-server arcdb-server
+          cp target/${{ matrix.target }}/release/arcdb-cli arcdb-cli
+          tar -czf ${{ matrix.archive_name }} arcdb-server arcdb-cli
 
       - name: Package Artifact (Windows)
         if: runner.os == 'Windows'
         shell: powershell
         run: |
-          Copy-Item "target/${{ matrix.target }}/release/arcdb.exe" -Destination "arcdb.exe"
-          Compress-Archive -Path "arcdb.exe" -DestinationPath "${{ matrix.archive_name }}"
+          Copy-Item "target/${{ matrix.target }}/release/arcdb-server.exe" -Destination "arcdb-server.exe"
+          Copy-Item "target/${{ matrix.target }}/release/arcdb-cli.exe" -Destination "arcdb-cli.exe"
+          Compress-Archive -Path "arcdb-server.exe", "arcdb-cli.exe" -DestinationPath "${{ matrix.archive_name }}"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4

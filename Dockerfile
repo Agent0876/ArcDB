@@ -13,10 +13,10 @@ FROM debian:bookworm-slim
 WORKDIR /app
 
 # Copy the binary from the builder stage
-COPY --from=builder /usr/src/arcdb/target/release/arcdb /app/arcdb
+COPY --from=builder /usr/src/arcdb/target/release/arcdb-server /app/arcdb-server
 
 # Expose the default port
 EXPOSE 7171
 
 # Run the server
-CMD ["./arcdb", "--server"]
+CMD ["./arcdb-server"]

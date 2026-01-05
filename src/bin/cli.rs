@@ -1,6 +1,4 @@
-//! ArcDB - A simple relational database engine
-//!
-//! This is the main entry point for the ArcDB CLI.
+//! ArcDB - CLI Client
 
 use std::io::{self, Write};
 use std::sync::Arc;
@@ -112,6 +110,102 @@ fn format_results(columns: &[String], rows: &[arcdb::storage::Tuple]) -> String 
     output
 }
 
+/// Execute a SQL statement
+fn execute_sql(sql: &str, catalog: &Catalog, engine: &mut ExecutionEngine) {
+    let sql = sql.trim();
+    if sql.is_empty() {
+        return;
+    }
+
+    // Parse
+    let mut parser = match Parser::new(sql) {
+        Ok(p) => p,
+        Err(e) => {
+            eprintln!("Parse error: {}", e);
+            return;
+        }
+    };
+
+    let stmt = match parser.parse() {
+        Ok(s) => s,
+        Err(e) => {
+            eprintln!("Parse error: {}", e);
+            return;
+        }
+    };
+
+    // Plan
+    let planner = Planner::new(catalog);
+    let plan = planner.plan(stmt);
+
+    // Execute
+    match engine.execute(plan) {
+        Ok(result) => {
+            if let Some(msg) = result.message {
+                println!("{}", msg);
+            } else if !result.columns.is_empty() || !result.rows.is_empty() {
+                print!("{}", format_results(&result.columns, &result.rows));
+            } else if result.affected_rows > 0 {
+                println!("{} row(s) affected", result.affected_rows);
+            }
+        }
+        Err(e) => {
+            eprintln!("Execution error: {}", e);
+        }
+    }
+}
+
+/// Handle special dot commands
+fn handle_special_command(cmd: &str, catalog: &Catalog) {
+    let parts: Vec<&str> = cmd.split_whitespace().collect();
+
+    match parts.first().map(|s| *s) {
+        Some(".help") => print_help(),
+        Some(".quit") | Some(".exit") => {
+            catalog.save_to_disk("arcdb.meta").ok();
+            println!("Goodbye!");
+            std::process::exit(0);
+        }
+        Some(".tables") => {
+            let tables = catalog.list_tables();
+            if tables.is_empty() {
+                println!("No tables found.");
+            } else {
+                println!("Tables:");
+                for table in tables {
+                    println!("  {}", table);
+                }
+            }
+        }
+        Some(".schema") => {
+            if let Some(table_name) = parts.get(1) {
+                match catalog.get_table_info(table_name) {
+                    Ok(info) => println!("{}", info),
+                    Err(e) => eprintln!("Error: {}", e),
+                }
+            } else {
+                // Show schema for all tables
+                for table_name in catalog.list_tables() {
+                    match catalog.get_table_info(&table_name) {
+                        Ok(info) => println!("{}", info),
+                        Err(e) => eprintln!("Error: {}", e),
+                    }
+                }
+            }
+        }
+        Some(".clear") => {
+            // Clear screen (ANSI escape code)
+            print!("\x1B[2J\x1B[1;1H");
+            io::stdout().flush().unwrap();
+        }
+        Some(cmd) => {
+            eprintln!("Unknown command: {}", cmd);
+            eprintln!("Type '.help' for available commands.");
+        }
+        None => {}
+    }
+}
+
 /// Main REPL loop
 fn run_repl() {
     let catalog =
@@ -180,125 +274,6 @@ fn run_repl() {
     println!("\nGoodbye!");
 }
 
-/// Handle special dot commands
-fn handle_special_command(cmd: &str, catalog: &Catalog) {
-    let parts: Vec<&str> = cmd.split_whitespace().collect();
-
-    match parts.first().map(|s| *s) {
-        Some(".help") => print_help(),
-        Some(".quit") | Some(".exit") => {
-            catalog.save_to_disk("arcdb.meta").ok();
-            println!("Goodbye!");
-            std::process::exit(0);
-        }
-        Some(".tables") => {
-            let tables = catalog.list_tables();
-            if tables.is_empty() {
-                println!("No tables found.");
-            } else {
-                println!("Tables:");
-                for table in tables {
-                    println!("  {}", table);
-                }
-            }
-        }
-        Some(".schema") => {
-            if let Some(table_name) = parts.get(1) {
-                match catalog.get_table_info(table_name) {
-                    Ok(info) => println!("{}", info),
-                    Err(e) => eprintln!("Error: {}", e),
-                }
-            } else {
-                // Show schema for all tables
-                for table_name in catalog.list_tables() {
-                    match catalog.get_table_info(&table_name) {
-                        Ok(info) => println!("{}", info),
-                        Err(e) => eprintln!("Error: {}", e),
-                    }
-                }
-            }
-        }
-        Some(".clear") => {
-            // Clear screen (ANSI escape code)
-            print!("\x1B[2J\x1B[1;1H");
-            io::stdout().flush().unwrap();
-        }
-        Some(cmd) => {
-            eprintln!("Unknown command: {}", cmd);
-            eprintln!("Type '.help' for available commands.");
-        }
-        None => {}
-    }
-}
-
-/// Execute a SQL statement
-fn execute_sql(sql: &str, catalog: &Catalog, engine: &mut ExecutionEngine) {
-    let sql = sql.trim();
-    if sql.is_empty() {
-        return;
-    }
-
-    // Parse
-    let mut parser = match Parser::new(sql) {
-        Ok(p) => p,
-        Err(e) => {
-            eprintln!("Parse error: {}", e);
-            return;
-        }
-    };
-
-    let stmt = match parser.parse() {
-        Ok(s) => s,
-        Err(e) => {
-            eprintln!("Parse error: {}", e);
-            return;
-        }
-    };
-
-    // Plan
-    let planner = Planner::new(catalog);
-    let plan = planner.plan(stmt);
-
-    // Execute
-    match engine.execute(plan) {
-        Ok(result) => {
-            if let Some(msg) = result.message {
-                println!("{}", msg);
-            } else if !result.columns.is_empty() || !result.rows.is_empty() {
-                print!("{}", format_results(&result.columns, &result.rows));
-            } else if result.affected_rows > 0 {
-                println!("{} row(s) affected", result.affected_rows);
-            }
-        }
-        Err(e) => {
-            eprintln!("Execution error: {}", e);
-        }
-    }
-}
-
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
-
-    if args.len() > 1 && (args[1] == "--server" || args[1] == "-s") {
-        let mut config = arcdb::server::ServerConfig::new();
-
-        // Optional: Parse port from args (e.g., --port 5433)
-        for i in 2..args.len() {
-            if args[i] == "--port" || args[i] == "-p" {
-                if let Some(port_str) = args.get(i + 1) {
-                    if let Ok(port) = port_str.parse() {
-                        config = config.port(port);
-                    }
-                }
-            }
-        }
-
-        let server = arcdb::server::Server::new(config);
-        if let Err(e) = server.start() {
-            eprintln!("Server error: {}", e);
-            std::process::exit(1);
-        }
-    } else {
-        run_repl();
-    }
+    run_repl();
 }
