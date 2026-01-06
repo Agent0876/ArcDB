@@ -76,6 +76,7 @@ The workflow will run and produce the following **archives** containing both `ar
     - **Windows**: `arcdb-windows-amd64.zip` (x64), `arcdb-windows-arm64.zip` (ARM64)
 - **Driver**:
     - `arcdb-jdbc-0.1.0.jar` (Kotlin JDBC Driver)
+    - `arcdb-0.1.0.tgz` (Node.js Client)
 
 ### Running the Server
 After downloading the archive for your OS:

@@ -117,8 +117,33 @@ jobs:
           name: arcdb-jdbc.jar
           path: clients/arcdb-jdbc/build/libs/arcdb-jdbc-*.jar
 
+  build-nodejs:
+    name: Build Node.js Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build Package
+        working-directory: clients/arcdb-nodejs
+        run: |
+          npm install
+          npm run build
+          npm pack
+
+      - name: Upload Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: arcdb-nodejs.tgz
+          path: clients/arcdb-nodejs/arcdb-*.tgz
+
   create-release:
-    needs: [build-release, build-jar]
+    needs: [build-release, build-jar, build-nodejs]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -138,6 +163,7 @@ jobs:
             arcdb-windows-amd64.zip/arcdb-windows-amd64.zip
             arcdb-windows-arm64.zip/arcdb-windows-arm64.zip
             arcdb-jdbc.jar/arcdb-jdbc-*.jar
+            arcdb-nodejs.tgz/arcdb-*.tgz
           draft: false
           prerelease: false
           generate_release_notes: true

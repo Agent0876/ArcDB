@@ -1,0 +1,26 @@
+{
+  "name": "arcdb",
+  "version": "0.1.0",
+  "description": "Node.js client for ArcDB",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "arcdb",
+    "database",
+    "sql",
+    "client"
+  ],
+  "author": "ArcDB Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/node": "^20.10.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
